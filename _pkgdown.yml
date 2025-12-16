@@ -11,10 +11,14 @@ template:
   params:
     bootswatch: "flatly"
     code_folding: "show"
+  bslib:
+      primary: "#0054AD"
+      danger: "#A6081A"
 
 navbar:
   structure:
     left:
+<<<<<<< HEAD
       - home
       - intro
       - reference
@@ -22,6 +26,15 @@ navbar:
       - tutorials
       - news
     right:
+=======
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: 
+>>>>>>> 9125f947c846e477f3daab3049d3d967baf179f4
       - github
       - search
   components:
@@ -42,7 +55,23 @@ navbar:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/danymukesha/CiteAnalyzer
-
+    search:  
+      icon: fas fa-search  
+      form: 
+        action: "/search"  
+        method: "get"
+        input:
+          type: "text"
+          placeholder: "Search..."
+          name: "query" 
+          class: "form-control"
+    navbar_toggle:
+      class: "navbar-toggler"
+      data_target: "#navbarNav"  # ID for the navbar collapse
+      aria_controls: "navbarNav"
+      aria_expanded: "false"
+      aria_label: "Toggle navigation"
+      icon: "navbar-toggler-icon"
 
 reference:
 - title: "Data Analysis"
