@@ -43,13 +43,13 @@ jobs:
           use-public-rspm: true
 
       - name: Install dependencies
-        run: |
-          install.packages("rcmdcheck")
-          install.packages("devtools")
-          install.packages(c("httr", "jsonlite", "dplyr", "tidyr", "ggplot2",
-                             "igraph", "rvest", "xml2", "stringr",
-                             "lubridate", "S4Vectors",
-                             "BiocGenerics", "methods"))
+          run: |
+            R -e "install.packages('rcmdcheck')"
+            R -e "install.packages('devtools')"
+            R -e "install.packages(
+              c('httr', 'jsonlite', 'dplyr', 'tidyr', 'ggplot2',
+              'igraph', 'rvest', 'xml2', 'stringr', 'lubridate', 'S4Vectors',
+              'BiocGenerics', 'methods'))"
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
