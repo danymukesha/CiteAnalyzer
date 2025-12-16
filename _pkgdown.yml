@@ -1,0 +1,76 @@
+title: "CiteAnalyzer"
+url: "https://danymukesha.github.io/CiteAnalyzer"
+
+authors:
+  Dany Mukesha:
+    href: https://github.com/danymukesha
+
+template:
+  bootstrap: 5
+  params:
+    bootswatch: "flatly"
+    code_folding: "show"
+
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: github
+  components:
+    articles:
+      text: Articles
+      menu:
+        - text: "Addressing Research Challenges"
+          href: articles/addressing_research_challenges.html
+        - text: "Best Practices"
+          href: articles/best_practice.html
+        - text: "CiteAnalyzer Overview"
+          href: articles/CiteAnalyzer.html
+    authors:
+      text: Authors
+      menu:
+        - text: "Authors"
+          href: authors.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/danymukesha/CiteAnalyzer
+
+
+reference:
+- title: "Data Analysis"
+  contents:
+    - '`AnalyzeCitationTrends`'
+    - '`calculate_h_index`'
+    - '`calculate_i10_index`'
+    - '`calculate_m_index`'
+    - '`estimate_impact_factor`'
+- title: "Scholar Comparison"
+  contents:
+    - '`CompareScholars`'
+    - '`GetScholarMetrics`'
+- title: "Network Analysis"
+  contents:
+    - '`CreateCitationNetwork`'
+    - '`get_co_citation_network`'
+    - '`PlotCollaborationNetwork`'
+- title: "Visualization"
+  contents:
+    - '`PlotCitationImpact`'
+    - '`PlotPublicationTrends`'
+- title: "Data Extraction & Utilities"
+  contents:
+    - '`ExtractScholarData`'
+    - '`FindCollaborators`'
+    - '`GetCitationHistory`'
+- title: "Classes"
+  contents:
+    - '`ScholarData-class`'
+    - '`ScholarProfile-class`'
+    - '`ScholarProfile`'
+
+

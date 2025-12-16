@@ -1,0 +1,229 @@
+---
+title: "CiteAnalyzer"
+subtitle: "Citation Analysis from Google Scholar"
+author: "Dany Mukesha"
+abstract: "Existing tools for Google Scholar citation analysis face
+    significant limitations including frequent blocking due to aggressive 
+    scraping, lack of reproducible workflows, and limited analytical 
+    capabilities beyond basic metrics. CiteAnalyzer addresses these 
+    challenges through a Bioconductor-compliant R package that implements 
+    ethical data extraction protocols with adaptive rate limiting, 
+    automatic retry mechanisms, and user-agent rotation to prevent service 
+    disruption. The package introduces a robust S4 class system for 
+    structured data storage and reproducible analysis workflows, enabling 
+    calculation of both standard metrics (h-index, i10-index, m-index) and 
+    advanced field-weighted impact scores. CiteAnalyzer uniquely integrates 
+    collaboration network analysis through co-citation network generation 
+    and community detection algorithms, providing insights into research 
+    communities and potential collaboration opportunities. 
+    
+    The tool includes publication-quality visualization tools for temporal
+    trend analysis, multi-scholar comparison, and interactive network 
+    exploration. Designed specifically for bioinformatics researchers and 
+    bibliometric analysts, CiteAnalyzer follows Bioconductor standards for 
+    documentation, testing, and parallel processing integration. 
+    
+    CiteAnalyzer empowers researchers to conduct ethical, reproducible, and 
+    sophisticated citation analysis that reveals deeper insights into 
+    scientific impact and collaboration patterns than previously possible 
+    with existing tools."
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('CiteAnalyzer')`"
+output: 
+  BiocStyle::html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{CiteAnalyzer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 6,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+## Introduction
+
+**CiteAnalyzer** is designed for citation analysis from Google Scholar data. 
+It addresses key common challenges face when analyzing citation data, 
+including:
+
+- **Rate limiting and blocking prevention** through built-in request 
+throttling
+- **Comprehensive metrics calculation** beyond basic h-index and i10-index
+- **Multi-scholar comparison** with normalized ranking systems
+- **Collaboration network analysis** to identify research communities
+- **Temporal trend analysis** to track research impact over time
+- **Publication impact visualization** with interactive plots
+
+Unlike existing tools, CiteAnalyzer ensures reproducibility, robust error
+handling, and integration with biological research workflows.
+
+## Installation
+
+To install CiteAnalyzer from Bioconductor:
+
+```{r include=FALSE, eval=FALSE}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("CiteAnalyzer")
+```
+
+Or install the development version from GitHub:
+
+```{r installation, eval=FALSE}
+remotes::install_github("danymukesha/CiteAnalyzer")
+```
+
+## Basic Usage
+
+### Creating a Scholar Profile
+
+The primary function for extracting Google Scholar data is 
+`ExtractScholarData()`. This function includes built-in rate limiting 
+to prevent Google Scholar from blocking requests.
+
+```{r extract}
+library(CiteAnalyzer)
+
+# Extract data for a scholar (replace with actual Google Scholar ID)
+# For demonstration, we'll use a sample ID
+scholar_data <- ExtractScholarData("qc6CJjYAAAAJ", max_publications = 50)
+
+# View basic information
+print(scholar_data@name)
+print(scholar_data@affiliation)
+print(scholar_data@interests)
+```
+
+### Calculating Metrics
+
+CiteAnalyzer provides metric calculation beyond standard indices:
+
+```{r calculate_metrics}
+# Calculate all available metrics
+metrics <- GetScholarMetrics(scholar_data)
+
+# View results
+print(metrics)
+
+# Calculate specific metrics
+h_index <- calculate_h_index(scholar_data@publications$citedby)
+i10_index <- calculate_i10_index(scholar_data@publications$citedby)
+m_index <- calculate_m_index(
+    h_index, 
+    min(scholar_data@publications$year, na.rm = TRUE)
+)
+
+cat(sprintf("h-index: %d\ni10-index: %d\nm-index: %.2f\n",
+            h_index, i10_index, m_index))
+```
+
+### Visualizing Citation Impact
+
+The package provides several visualization functions to help interpret 
+citation data:
+
+```{r visualize_metrics}
+# Plot top publications by citations
+p1 <- PlotCitationImpact(scholar_data, plot_type = "summary")
+print(p1)
+
+# Plot publication and citation timeline
+p2 <- PlotCitationImpact(scholar_data, plot_type = "timeline")
+print(p2)
+```
+
+## Advanced Analysis
+
+### Comparing Multiple Scholars
+
+CiteAnalyzer excels at comparing multiple scholars using normalized metrics:
+
+```{r comparing_multiple_scholars}
+# Extract data for multiple scholars
+scholar1 <- ExtractScholarData("qc6CJjYAAAAJ", max_publications = 30)
+scholar2 <- ExtractScholarData("VWCHlwkAAAAJ", max_publications = 30)
+scholar3 <- ExtractScholarData("vzXv764AAAAJ", max_publications = 30)
+
+# Compare scholars
+comparison <- CompareScholars(list(scholar1, scholar2, scholar3))
+
+# View comparison results
+print(comparison)
+
+# Create comparison visualization
+p3 <- PlotCitationImpact(scholar1, plot_type = "comparison", 
+                        compare_with = list(scholar2, scholar3), 
+                        radar_coord = "polar")
+print(p3)
+```
+
+### Analyzing Citation Trends
+
+Track how citation patterns evolve over time:
+
+```{r analyze_citation_trends}
+# Analyze trends for multiple scholars
+trends <- AnalyzeCitationTrends(list(scholar1, scholar2, scholar3), time_period = "10y")
+
+# Plot publication trends
+p4 <- PlotPublicationTrends(list(scholar1, scholar2, scholar3), trend_type = "both")
+print(p4)
+```
+
+### Finding Collaborators
+
+Identify potential research collaborators based on similarity metrics:
+
+```{r finding_collabos}
+# Find potential collaborators for scholar1
+collaborators <- FindCollaborators(scholar1, list(scholar2, scholar3), min_similarity = 0.2)
+
+# View results
+print(collaborators)
+```
+
+### Network Analysis
+
+Visualize collaboration networks between researchers:
+
+```{r network_analysis}
+# Create citation network
+network <- CreateCitationNetwork(list(scholar1, scholar2, scholar3), min_citations = 5)
+
+# Plot collaboration network
+if (igraph::gsize(network) > 0) {
+    p5 <- PlotCollaborationNetwork(network, layout_type = "fr")
+    print(p5)
+}
+```
+
+
+## Conclusion
+
+CiteAnalyzer provides a toolkit for citation analysis from Google Scholar 
+data. By addressing key challenges like rate limiting, reproducibility, and
+metric calculation, it enables the user to gain deeper insights into research
+impact and collaboration patterns.
+
+The implement structured S4 classes, extensive documentation, and 
+visualization capabilities make it suitable for both individual users and
+large-scale bibliometric studies. 
+
+Future versions will include integration with additional citation databases
+and more sophisticated network analysis algorithms.
+
+## Session Information
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,46 @@
+Package: CiteAnalyzer
+Title: Citation Analysis from Google Scholar
+Version: 1.0.0
+Authors@R: 
+    person("Dany", "Mukesha", , "danymukesha@gmail.com", 
+            role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0001-9514-751X"))
+Description: Toolkit for analyzing citation data from Google Scholar. 
+    Provides data extraction with rate limiting, citation metrics, 
+    collaboration network analysis, and publication impact visualization. 
+    Addresses common challenges including Google Scholar blocking, 
+    data reproducibility, and multi-scholar comparison.
+Depends:
+    R (>= 4.3.0)
+Imports:
+    httr,
+    jsonlite,
+    dplyr,
+    tidyr,
+    ggplot2,
+    igraph,
+    rvest,
+    xml2,
+    stringr,
+    lubridate,
+    S4Vectors,
+    BiocGenerics,
+    methods
+Suggests:
+    testthat (>= 3.0.0),
+    rmarkdown,
+    knitr,
+    BiocStyle,
+    covr,
+    learnr
+Enhances:
+    BiocParallel
+SystemRequirements: 
+    curl
+License: Artistic-2.0
+URL: https://github.com/danymukesha/CiteAnalyzer, https://danymukesha.github.io/CiteAnalyzer
+BugReports: https://github.com/danymukesha/CiteAnalyzer/issues
+BiocViews: Software, Annotation, Visualization, NetworkAnalysis
+Encoding: UTF-8
+RoxygenNote: 7.3.2
+VignetteBuilder: knitr
