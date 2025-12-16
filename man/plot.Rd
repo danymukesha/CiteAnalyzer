@@ -9,6 +9,25 @@ plot(x, y, ...)
 
 \S4method{plot}{ScholarProfile,ANY}(x, y, type = c("citations", "publications", "h_index"), ...)
 }
+\arguments{
+\item{x}{An object of class `ScholarProfile`.}
+
+\item{y}{Ignored, for method consistency.}
+
+\item{...}{Additional parameters passed to ggplot or other functions.}
+
+\item{type}{A character string indicating the type of plot to generate. Options are: "citations", "publications", or "h_index".}
+}
+\value{
+A `ggplot2` object representing the plot.
+}
 \description{
 Plot various metrics (citations, publications, or h-index) for a scholar's profile.
+}
+\examples{
+scholar_profile <- new("ScholarProfile", publications = data.frame(citedby = c(10, 20, 30, 40), year = c(2000, 2005, 2010, 2015), title = c("Paper1", "Paper2", "Paper3", "Paper4")))
+plot(scholar_profile, type = "citations")
+plot(scholar_profile, type = "publications")
+plot(scholar_profile, type = "h_index")
+
 }

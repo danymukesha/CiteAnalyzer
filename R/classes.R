@@ -76,6 +76,7 @@ setClass("ScholarData",
 #'
 #' @param object An object of class `ScholarProfile`.
 #' @param metric A character string specifying the metric to calculate. Options are: "h_index", "i10_index", or "m_index".
+#' @param ... Additional arguments passed to the generic function (currently unused).
 #'
 #' @return A numeric value representing the chosen citation metric.
 #'
@@ -88,7 +89,8 @@ setClass("ScholarData",
 #' @export
 setGeneric("calculateMetrics", function(object, ...) standardGeneric("calculateMetrics"))
 
-#' @export
+#' @method calculateMetrics ScholarProfile
+#' @rdname calculateMetrics
 setMethod(
     "calculateMetrics", "ScholarProfile",
     function(object, metric = c("h_index", "i10_index", "m_index")) {
@@ -121,6 +123,21 @@ setMethod(
 #' @name plot
 #' @title Plot Scholar Profile Metrics
 #' @description Plot various metrics (citations, publications, or h-index) for a scholar's profile.
+#'
+#' @param x An object of class `ScholarProfile`.
+#' @param y Ignored, for method consistency.
+#' @param type A character string indicating the type of plot to generate. Options are: "citations", "publications", or "h_index".
+#'
+#' @param ... Additional parameters passed to ggplot or other functions.
+#'
+#' @return A `ggplot2` object representing the plot.
+#'
+#' @examples
+#' scholar_profile <- new("ScholarProfile", publications = data.frame(citedby = c(10, 20, 30, 40), year = c(2000, 2005, 2010, 2015), title = c("Paper1", "Paper2", "Paper3", "Paper4")))
+#' plot(scholar_profile, type = "citations")
+#' plot(scholar_profile, type = "publications")
+#' plot(scholar_profile, type = "h_index")
+#'
 #' @export
 setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 

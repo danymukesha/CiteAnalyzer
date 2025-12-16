@@ -2,12 +2,17 @@
 % Please edit documentation in R/classes.R
 \name{calculateMetrics}
 \alias{calculateMetrics}
+\alias{calculateMetrics,ScholarProfile-method}
 \title{Calculate Citation Metrics}
 \usage{
 calculateMetrics(object, ...)
+
+\S4method{calculateMetrics}{ScholarProfile}(object, metric = c("h_index", "i10_index", "m_index"))
 }
 \arguments{
 \item{object}{An object of class `ScholarProfile`.}
+
+\item{...}{Additional arguments passed to the generic function (currently unused).}
 
 \item{metric}{A character string specifying the metric to calculate. Options are: "h_index", "i10_index", or "m_index".}
 }
