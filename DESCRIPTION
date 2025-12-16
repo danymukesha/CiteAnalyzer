@@ -31,8 +31,9 @@ Suggests:
     rmarkdown,
     knitr,
     BiocStyle,
-    covr,
-    learnr
+    covr,    
+    sessioninfo (>= 1.1),
+    rcmdcheck (>= 1.3)
 Enhances:
     BiocParallel
 SystemRequirements: 

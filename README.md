@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# CiteAnalyzer 📦
+# CiteAnalyzer 📦 <a href="https://danymukesha.github.io/CiteAnalyzer/"><img src="man/figures/logo.png" align="right" height="139" alt="CiteAnalyzer website" /></a>
 
 <!-- badges: start -->
 

@@ -6,6 +6,8 @@
 \alias{CiteAnalyzer}
 \title{CiteAnalyzer: Citation Analysis from Google Scholar}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Toolkit for analyzing citation data from Google Scholar. Provides data extraction with rate limiting, citation metrics, collaboration network analysis, and publication impact visualization. Addresses common challenges including Google Scholar blocking, data reproducibility, and multi-scholar comparison.
 }
 \section{Key Features}{

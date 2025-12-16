@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-# CiteAnalyzer 📦
+# CiteAnalyzer 📦 <a href="https://danymukesha.github.io/CiteAnalyzer/"><img src="man/figures/logo.png" align="right" height="139" alt="CiteAnalyzer website" /></a>
+
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/danymukesha/CiteAnalyzer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/danymukesha/CiteAnalyzer/actions/workflows/R-CMD-check.yaml)

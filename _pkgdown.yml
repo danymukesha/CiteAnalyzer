@@ -7,6 +7,7 @@ authors:
 
 template:
   bootstrap: 5
+  light-switch: true
   params:
     bootswatch: "flatly"
     code_folding: "show"
@@ -14,13 +15,15 @@ template:
 navbar:
   structure:
     left:
-    - home
-    - intro
-    - reference
-    - articles
-    - tutorials
-    - news
-    right: github
+      - home
+      - intro
+      - reference
+      - articles
+      - tutorials
+      - news
+    right:
+      - github
+      - search
   components:
     articles:
       text: Articles

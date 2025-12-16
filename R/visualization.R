@@ -100,13 +100,13 @@ PlotCitationImpact <- function(scholar_profile, plot_type = "summary", compare_w
         p <- ggplot(yearly_data, aes(x = year)) +
             geom_line(aes(y = publications, color = "Publications"), size = 1.5) +
             geom_point(aes(y = publications, color = "Publications"), size = 3) +
-            geom_line(aes(y = total_citations / 10, color = "Citations (÷10)"), size = 1.5, linetype = "dashed") +
-            geom_point(aes(y = total_citations / 10, color = "Citations (÷10)"), size = 3) +
+            geom_line(aes(y = total_citations / 10, color = "Citations (\u00F710)"), size = 1.5, linetype = "dashed") +
+            geom_point(aes(y = total_citations / 10, color = "Citations (\u00F710)"), size = 3) +
             scale_y_continuous(
                 name = "Number of Publications",
                 sec.axis = sec_axis(~ . * 10, name = "Total Citations")
             ) +
-            scale_color_manual(values = c("Publications" = "steelblue", "Citations (÷10)" = "darkred")) +
+            scale_color_manual(values = c("Publications" = "steelblue", "Citations (\u00F710)" = "darkred")) +
             labs(
                 title = sprintf("Publication and Citation Timeline - %s", scholar_profile@name),
                 x = "Year",
