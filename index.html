@@ -55,22 +55,17 @@
 <div class="page-header"><h1 id="citeanalyzer-">CiteAnalyzer 📦<a class="anchor" aria-label="anchor" href="#citeanalyzer-"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p>Toolkit for analyzing citation data from Google Scholar. Provides data extraction with rate limiting, citation metrics, collaboration network analysis, and publication impact visualization. Addresses common challenges including Google Scholar blocking, data reproducibility, and multi-scholar comparison.</p>
 <div class="section level2">
 <h2 id="table-of-contents">Table of Contents<a class="anchor" aria-label="anchor" href="#table-of-contents"></a>
 </h2>
 <ul>
-<li><a href="#id_-key-features">Key Features</a></li>
-<li><a href="#id_-installation">Installation</a></li>
-<li><a href="#id_-quick-start">Quick Start</a></li>
-<li><a href="#id_-analysis">Analysis</a></li>
-<li><a href="#id_-best-practices">Best Practices</a></li>
-<li><a href="#id_-documentation">Documentation</a></li>
-<li><a href="#id_-contributing">Contributing</a></li>
-<li><a href="#id_-license">License</a></li>
-<li><a href="#id_-citation">Citation</a></li>
-<li><a href="#id_-contact">Contact</a></li>
+<li><a href="#key-features">Key Features</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#quick-start">Quick Start</a></li>
+<li><a href="#analysis">Analysis</a></li>
+<li><a href="#documentation">Documentation</a></li>
 </ul>
 </div>
 <div class="section level2">
@@ -157,26 +152,26 @@
 <div class="section level3">
 <h3 id="basic-scholar-profile-analysis">Basic Scholar Profile Analysis<a class="anchor" aria-label="anchor" href="#basic-scholar-profile-analysis"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/danymukesha/CiteAnalyzer" class="external-link">CiteAnalyzer</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create a complete scholar profile (replace with your Google Scholar ID)</span></span>
-<span><span class="co"># Example ID: "qc6CJjYAAAAJ" - replace with your actual ID</span></span>
-<span><span class="va">scholar_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ScholarProfile.html">ScholarProfile</a></span><span class="op">(</span><span class="st">"qc6CJjYAAAAJ"</span>, max_publications <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># View summary metrics</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Scholar: %s\n"</span>, <span class="va">scholar_data</span><span class="op">@</span><span class="va">profiles</span><span class="op">@</span><span class="va">name</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Affiliation: %s\n"</span>, <span class="va">scholar_data</span><span class="op">@</span><span class="va">profiles</span><span class="op">@</span><span class="va">affiliation</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Total Publications: %d\n"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">scholar_data</span><span class="op">@</span><span class="va">profiles</span><span class="op">@</span><span class="va">publications</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Total Citations: %d\n"</span>, <span class="va">scholar_data</span><span class="op">@</span><span class="va">profiles</span><span class="op">@</span><span class="va">citations_total</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"h-index: %d\n"</span>, <span class="va">scholar_data</span><span class="op">@</span><span class="va">profiles</span><span class="op">@</span><span class="va">h_index</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"i10-index: %d\n"</span>, <span class="va">scholar_data</span><span class="op">@</span><span class="va">profiles</span><span class="op">@</span><span class="va">i10_index</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Plot top publications by citations</span></span>
-<span><span class="fu"><a href="reference/PlotCitationImpact.html">PlotCitationImpact</a></span><span class="op">(</span><span class="va">scholar_data</span><span class="op">@</span><span class="va">profiles</span>, plot_type <span class="op">=</span> <span class="st">"summary"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Plot publication and citation trends over time</span></span>
-<span><span class="fu"><a href="reference/PlotCitationImpact.html">PlotCitationImpact</a></span><span class="op">(</span><span class="va">scholar_data</span><span class="op">@</span><span class="va">profiles</span>, plot_type <span class="op">=</span> <span class="st">"timeline"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(CiteAnalyzer)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Extract data for a scholar (using example ID - replace with actual ID)</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># Example ID: "qc6CJjYAAAAJ" - replace with your target scholar's ID</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>scholar_data <span class="ot">&lt;-</span> <span class="fu">ExtractScholarData</span>(<span class="st">"qc6CJjYAAAAJ"</span>, <span class="at">max_publications =</span> <span class="dv">20</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co"># View basic information about the scholar</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Name:"</span>, scholar_data<span class="sc">@</span>name, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Affiliation:"</span>, scholar_data<span class="sc">@</span>affiliation, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Research Interests:"</span>, scholar_data<span class="sc">@</span>interests, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Total Publications:"</span>, <span class="fu">nrow</span>(scholar_data<span class="sc">@</span>publications), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Total Citations:"</span>, scholar_data<span class="sc">@</span>citations_total, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"h-index:"</span>, scholar_data<span class="sc">@</span>h_index, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"i10-index:"</span>, scholar_data<span class="sc">@</span>i10_index, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co"># Plot top publications by citations</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="fu">PlotCitationImpact</span>(scholar_data<span class="sc">@</span>, <span class="at">plot_type =</span> <span class="st">"summary"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co"># Plot publication and citation trends over time</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="fu">PlotCitationImpact</span>(scholar_data<span class="sc">@</span>profiles, <span class="at">plot_type =</span> <span class="st">"timeline"</span>)</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="multi-scholar-comparison">Multi-Scholar Comparison<a class="anchor" aria-label="anchor" href="#multi-scholar-comparison"></a>
@@ -219,7 +214,7 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="comprehensive-analysis">Comprehensive Analysis<a class="anchor" aria-label="anchor" href="#comprehensive-analysis"></a>
+<h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
 </h2>
 <div class="section level3">
 <h3 id="citation-trend-analysis">Citation Trend Analysis<a class="anchor" aria-label="anchor" href="#citation-trend-analysis"></a>
@@ -360,7 +355,12 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/danymukesha/CiteAnalyzer/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/danymukesha/CiteAnalyzer/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
