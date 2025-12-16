@@ -107,24 +107,25 @@ setMethod(
             }
             return(h)
         } else if (metric == "i10_index") {
-            sum(citations >= 10)
+            return(sum(citations >= 10))
         } else if (metric == "m_index") {
             h <- calculateMetrics(object, "h_index")
             valid_years <- na.omit(object@publications$year)
             time_diff <- difftime(Sys.Date(), min(valid_years), units = "days")
             career_years <- as.numeric(time_diff) / 365.25
-            if (career_years > 0) {
-                h / career_years
-            } else {
-                0
-            }
+            return(ifelse(career_years > 0, h / career_years, 0))
         }
     }
 )
 
+#' @name plot
+#' @title Plot Scholar Profile Metrics
+#' @description Plot various metrics (citations, publications, or h-index) for a scholar's profile.
 #' @export
 setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 
+#' @method plot ScholarProfile
+#' @rdname plot
 #' @export
 setMethod(
     "plot", "ScholarProfile",
