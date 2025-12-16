@@ -7,9 +7,13 @@ authors:
 
 template:
   bootstrap: 5
+  light-switch: true
   params:
     bootswatch: "flatly"
     code_folding: "show"
+    bslib:
+        primary: "#0054AD"
+        danger: "#A6081A"
 
 navbar:
   structure:
