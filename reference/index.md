@@ -53,3 +53,7 @@
   : ScholarProfile S4 Class
 - [`ScholarProfile()`](https://danymukesha.github.io/CiteAnalyzer/reference/ScholarProfile.md)
   : Scholar Profile
+- [`calculateMetrics()`](https://danymukesha.github.io/CiteAnalyzer/reference/calculateMetrics.md)
+  : Calculate Citation Metrics
+- [`plot()`](https://danymukesha.github.io/CiteAnalyzer/reference/plot.md)
+  : Plot Scholar Profile Metrics
