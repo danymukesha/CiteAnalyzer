@@ -11,9 +11,9 @@ template:
   params:
     bootswatch: "flatly"
     code_folding: "show"
-    bslib:
-        primary: "#0054AD"
-        danger: "#A6081A"
+  bslib:
+      primary: "#0054AD"
+      danger: "#A6081A"
 
 navbar:
   structure:
