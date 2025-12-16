@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/danymukesha/CiteAnalyzer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/danymukesha/CiteAnalyzer/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Toolkit for analyzing citation data from Google Scholar. Provides data
@@ -15,16 +16,11 @@ multi-scholar comparison.
 
 ## Table of Contents
 
-- [Key Features](#-key-features)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Analysis](#-analysis)
-- [Best Practices](#-best-practices)
-- [Documentation](#-documentation)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Citation](#-citation)
-- [Contact](#-contact)
+- [Key Features](#key-features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Analysis](#analysis)
+- [Documentation](#documentation)
 
 ## Key Features
 
@@ -93,20 +89,21 @@ R CMD INSTALL CiteAnalyzer_1.0.0.tar.gz
 ``` r
 library(CiteAnalyzer)
 
-# Create a complete scholar profile (replace with your Google Scholar ID)
-# Example ID: "qc6CJjYAAAAJ" - replace with your actual ID
-scholar_data <- ScholarProfile("qc6CJjYAAAAJ", max_publications = 50)
+# Extract data for a scholar (using example ID - replace with actual ID)
+# Example ID: "qc6CJjYAAAAJ" - replace with your target scholar's ID
+scholar_data <- ExtractScholarData("qc6CJjYAAAAJ", max_publications = 20)
 
-# View summary metrics
-cat(sprintf("Scholar: %s\n", scholar_data@profiles@name))
-cat(sprintf("Affiliation: %s\n", scholar_data@profiles@affiliation))
-cat(sprintf("Total Publications: %d\n", nrow(scholar_data@profiles@publications)))
-cat(sprintf("Total Citations: %d\n", scholar_data@profiles@citations_total))
-cat(sprintf("h-index: %d\n", scholar_data@profiles@h_index))
-cat(sprintf("i10-index: %d\n", scholar_data@profiles@i10_index))
+# View basic information about the scholar
+cat("Name:", scholar_data@name, "\n")
+cat("Affiliation:", scholar_data@affiliation, "\n")
+cat("Research Interests:", scholar_data@interests, "\n")
+cat("Total Publications:", nrow(scholar_data@publications), "\n")
+cat("Total Citations:", scholar_data@citations_total, "\n")
+cat("h-index:", scholar_data@h_index, "\n")
+cat("i10-index:", scholar_data@i10_index, "\n")
 
 # Plot top publications by citations
-PlotCitationImpact(scholar_data@profiles, plot_type = "summary")
+PlotCitationImpact(scholar_data@, plot_type = "summary")
 
 # Plot publication and citation trends over time
 PlotCitationImpact(scholar_data@profiles, plot_type = "timeline")
@@ -151,7 +148,7 @@ if (nrow(collaborators) > 0) {
 }
 ```
 
-## Comprehensive Analysis
+## Analysis
 
 ### Citation Trend Analysis
 
