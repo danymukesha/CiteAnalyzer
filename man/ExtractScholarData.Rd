@@ -9,7 +9,8 @@ ExtractScholarData(
   max_publications = 100,
   rate_limit_seconds = 5,
   retry_attempts = 3,
-  user_agent = NULL
+  user_agent = NULL,
+  cache_dir = NULL
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ ExtractScholarData(
 \item{retry_attempts}{Integer number of retry attempts if request fails (default: 3)}
 
 \item{user_agent}{Character string for custom user agent (optional)}
+
+\item{cache_dir}{Directory for storing cached data (default: NULL for temporary cache)}
 }
 \value{
 ScholarProfile object containing scholar data and publications

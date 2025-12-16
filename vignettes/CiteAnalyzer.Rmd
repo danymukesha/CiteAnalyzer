@@ -96,7 +96,8 @@ library(CiteAnalyzer)
 
 # Extract data for a scholar (replace with actual Google Scholar ID)
 # For demonstration, we'll use a sample ID
-scholar_data <- ExtractScholarData("qc6CJjYAAAAJ", max_publications = 50)
+scholar_data <- ExtractScholarData("qc6CJjYAAAAJ", max_publications = 50,
+                                   cache_dir = "temp/")
 
 # View basic information
 print(scholar_data@name)
@@ -150,9 +151,12 @@ CiteAnalyzer excels at comparing multiple scholars using normalized metrics:
 
 ```{r comparing_multiple_scholars}
 # Extract data for multiple scholars
-scholar1 <- ExtractScholarData("qc6CJjYAAAAJ", max_publications = 30)
-scholar2 <- ExtractScholarData("VWCHlwkAAAAJ", max_publications = 30)
-scholar3 <- ExtractScholarData("vzXv764AAAAJ", max_publications = 30)
+scholar1 <- ExtractScholarData("qc6CJjYAAAAJ", max_publications = 30, 
+                               cache_dir = "temp")
+scholar2 <- ExtractScholarData("VWCHlwkAAAAJ", max_publications = 30,
+                               cache_dir = "temp")
+scholar3 <- ExtractScholarData("vzXv764AAAAJ", max_publications = 30,
+                               cache_dir = "temp")
 
 # Compare scholars
 comparison <- CompareScholars(list(scholar1, scholar2, scholar3))

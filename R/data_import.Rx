@@ -1,0 +1,240 @@
+ExtractScholarData <- function(
+  scholar_id,
+  max_publications = 100,
+  rate_limit_seconds = 5,
+  retry_attempts = 3,
+  user_agent = NULL
+) {
+
+  # ------------------ Input validation ------------------
+  if (!is.character(scholar_id) || length(scholar_id) != 1 || nchar(scholar_id) == 0) {
+    stop("scholar_id must be a non-empty character string")
+  }
+
+  if (!is.numeric(max_publications) || max_publications <= 0) {
+    stop("max_publications must be a positive integer")
+  }
+
+  if (!is.numeric(rate_limit_seconds) || rate_limit_seconds < 0) {
+    stop("rate_limit_seconds must be non-negative")
+  }
+
+  # ------------------ User agent ------------------
+  if (is.null(user_agent)) {
+    user_agent <- paste(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "AppleWebKit/537.36 (KHTML, like Gecko)",
+      "Chrome/91.0.4472.124 Safari/537.36",
+      "CiteAnalyzer-R-package/1.0"
+    )
+  }
+
+  # ------------------ Safe request helper ------------------
+  safe_request <- function(url, attempt = 1) {
+
+    if (attempt > retry_attempts) {
+      stop(sprintf("Failed to retrieve data after %d attempts", retry_attempts))
+    }
+
+    message(sprintf(
+      "Retrieving data from: %s (attempt %d/%d)",
+      url, attempt, retry_attempts
+    ))
+
+    tryCatch(
+      {
+        resp <- httr2::request(url) |>
+          httr2::req_headers(
+            "User-Agent" = user_agent,
+            "Accept" = "text/html,application/xhtml+xml"
+          ) |>
+          httr2::req_timeout(30) |>
+          httr2::req_perform()
+
+        if (httr2::resp_status(resp) != 200) {
+          warning(sprintf("HTTP %d error: %s", httr2::resp_status(resp), url))
+          Sys.sleep(rate_limit_seconds * 2)
+          return(safe_request(url, attempt + 1))
+        }
+
+        resp
+      },
+      error = function(e) {
+        warning(sprintf(
+          "Request failed: %s. Retrying in %d seconds...",
+          e$message, rate_limit_seconds * 2
+        ))
+        Sys.sleep(rate_limit_seconds * 2)
+        safe_request(url, attempt + 1)
+      }
+    )
+  }
+
+  # ------------------ Profile page ------------------
+  base_url <- sprintf(
+    "https://scholar.google.com/citations?user=%s&pagesize=100",
+    scholar_id
+  )
+
+  profile_resp <- safe_request(base_url)
+  profile_html <- httr2::resp_body_string(profile_resp)
+  profile_page <- rvest::read_html(profile_html)
+
+  # ------------------ Metadata extraction ------------------
+  name <- tryCatch(
+    rvest::html_node(profile_page, "#gsc_prf_in") |>
+      rvest::html_text(trim = TRUE),
+    error = function(e) NA_character_
+  )
+
+  affiliation <- tryCatch(
+    rvest::html_node(profile_page, ".gsc_prf_il") |>
+      rvest::html_text(trim = TRUE),
+    error = function(e) NA_character_
+  )
+
+  interests <- tryCatch(
+    rvest::html_nodes(profile_page, ".gsc_prf_inta") |>
+      rvest::html_text(trim = TRUE) |>
+      paste(collapse = ", "),
+    error = function(e) NA_character_
+  )
+
+  homepage <- tryCatch(
+    rvest::html_node(profile_page, ".gsc_prf_ivh a") |>
+      rvest::html_attr("href"),
+    error = function(e) NA_character_
+  )
+
+  metrics <- tryCatch(
+    {
+      nodes <- rvest::html_nodes(profile_page, ".gsc_rsb_std")
+      if (length(nodes) >= 6) {
+        as.numeric(rvest::html_text(nodes[1:6])) |>
+          setNames(c(
+            "citations_total", "citations_5y",
+            "h_index", "h_index_5y",
+            "i10_index", "i10_index_5y"
+          ))
+      } else {
+        rep(NA_real_, 6)
+      }
+    },
+    error = function(e) rep(NA_real_, 6)
+  )
+
+  # ------------------ Publications ------------------
+  publications <- data.frame()
+  page <- 0
+  total_extracted <- 0
+
+  repeat {
+
+    page <- page + 1
+
+    page_html <- if (page == 1) {
+      profile_page
+    } else {
+      Sys.sleep(rate_limit_seconds)
+      url <- sprintf(
+        "https://scholar.google.com/citations?user=%s&cstart=%d&pagesize=100",
+        scholar_id, (page - 1) * 100
+      )
+      resp <- safe_request(url)
+      rvest::read_html(httr2::resp_body_string(resp))
+    }
+
+    rows <- rvest::html_nodes(page_html, ".gsc_a_tr")
+    if (length(rows) == 0) break
+
+    for (row in rows) {
+
+      if (total_extracted >= max_publications) break
+
+      tryCatch(
+        {
+          publications <- rbind(
+            publications,
+            data.frame(
+              title = rvest::html_node(row, ".gsc_a_at") |> rvest::html_text(trim = TRUE),
+              authors = rvest::html_node(row, ".gs_gray:first-child") |> rvest::html_text(trim = TRUE),
+              journal = rvest::html_node(row, ".gs_gray:nth-child(2)") |> rvest::html_text(trim = TRUE),
+              year = as.numeric(rvest::html_node(row, ".gsc_a_h") |> rvest::html_text()),
+              citedby = as.numeric(rvest::html_node(row, ".gsc_a_ac") |> rvest::html_text()),
+              pub_id = rvest::html_node(row, ".gsc_a_at") |>
+                rvest::html_attr("data-href") |>
+                stringr::str_match("cites=([0-9]+)") |>
+                .[, 2],
+              stringsAsFactors = FALSE
+            )
+          )
+          total_extracted <- total_extracted + 1
+        },
+        error = function(e) {
+          warning("Failed to extract publication")
+        }
+      )
+    }
+
+    if (total_extracted >= max_publications || length(rows) < 100) break
+  }
+
+  # ------------------ ScholarProfile object ------------------
+  new(
+    "ScholarProfile",
+    scholar_id = scholar_id,
+    name = ifelse(is.na(name), "Unknown Scholar", name),
+    affiliation = ifelse(is.na(affiliation), "Unknown Institution", affiliation),
+    interests = ifelse(is.na(interests), "Unknown Interests", interests),
+    homepage = ifelse(is.na(homepage), "", homepage),
+    citations_total = ifelse(is.na(metrics["citations_total"]), 0, metrics["citations_total"]),
+    citations_5y = ifelse(is.na(metrics["citations_5y"]), 0, metrics["citations_5y"]),
+    h_index = ifelse(is.na(metrics["h_index"]), 0, metrics["h_index"]),
+    h_index_5y = ifelse(is.na(metrics["h_index_5y"]), 0, metrics["h_index_5y"]),
+    i10_index = ifelse(is.na(metrics["i10_index"]), 0, metrics["i10_index"]),
+    i10_index_5y = ifelse(is.na(metrics["i10_index_5y"]), 0, metrics["i10_index_5y"]),
+    publications = publications
+  )
+}
+
+GetCitationHistory <- function(pub_id, rate_limit_seconds = 5) {
+
+  if (!is.character(pub_id) || length(pub_id) != 1 || nchar(pub_id) == 0) {
+    stop("pub_id must be a non-empty character string")
+  }
+
+  url <- sprintf(
+    "https://scholar.google.com/citations?view_op=view_citation&citation_for_view=%s",
+    pub_id
+  )
+
+  resp <- tryCatch(
+    httr2::request(url) |>
+      httr2::req_headers(
+        "User-Agent" = "Mozilla/5.0",
+        "Accept" = "text/html,application/xhtml+xml"
+      ) |>
+      httr2::req_timeout(30) |>
+      httr2::req_perform(),
+    error = function(e) NULL
+  )
+
+  if (is.null(resp) || httr2::resp_status(resp) != 200) {
+    warning("Failed to retrieve citation history")
+    return(data.frame(year = integer(), citations = integer()))
+  }
+
+  # Simulated citation history (unchanged behavior)
+  current_year <- as.numeric(format(Sys.Date(), "%Y"))
+  years <- seq(max(2000, current_year - 10), current_year)
+  base <- sample(5:50, 1)
+  citations <- pmax(round(base * exp(-0.2 * (current_year - years))), 0)
+
+  Sys.sleep(rate_limit_seconds)
+
+  data.frame(
+    year = years,
+    citations = citations,
+    stringsAsFactors = FALSE
+  )
+}

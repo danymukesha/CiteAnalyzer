@@ -9,6 +9,7 @@
 #' @param rate_limit_seconds Numeric seconds to wait between requests (default: 5)
 #' @param retry_attempts Integer number of retry attempts if request fails (default: 3)
 #' @param user_agent Character string for custom user agent (optional)
+#' @param cache_dir Directory for storing cached data (default: NULL for temporary cache)
 #'
 #' @return ScholarProfile object containing scholar data and publications
 #' @export
@@ -20,7 +21,7 @@
 #' }
 ExtractScholarData <- function(scholar_id, max_publications = 100,
                                rate_limit_seconds = 5, retry_attempts = 3,
-                               user_agent = NULL) {
+                               user_agent = NULL, cache_dir = NULL) {
     # Validate scholar_id to ensure it is a non-empty character string
     if (!is.character(scholar_id) || length(scholar_id) != 1 || nchar(scholar_id) == 0 || is.na(scholar_id)) {
         stop("scholar_id must be a non-empty character string")
@@ -43,6 +44,22 @@ ExtractScholarData <- function(scholar_id, max_publications = 100,
             "Chrome/91.0.4472.124 Safari/537.36",
             "CiteAnalyzer-R-package/1.0"
         )
+    }
+
+    if (is.null(cache_dir)) {
+        cache_dir <- tempdir()
+    }
+
+    # Function to get cache filename
+    cache_filename <- function(scholar_id) {
+        file.path(cache_dir, paste0("scholar_data_", scholar_id, ".rds"))
+    }
+
+    # Check if cached data exists
+    cache_file <- cache_filename(scholar_id)
+    if (file.exists(cache_file)) {
+        message("Loading cached data")
+        return(readRDS(cache_file))
     }
 
     # Function to make safe HTTP requests with retries
@@ -272,6 +289,8 @@ ExtractScholarData <- function(scholar_id, max_publications = 100,
         i10_index_5y = ifelse(is.na(metrics["i10_index_5y"]), 0, metrics["i10_index_5y"]),
         publications = publications
     )
+
+    saveRDS(scholar_profile, cache_file)
 
     message(sprintf(
         "Successfully extracted data for %s (%d publications)",
