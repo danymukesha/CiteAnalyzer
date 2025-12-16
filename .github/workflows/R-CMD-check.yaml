@@ -3,7 +3,9 @@
 on:
   push:
     branches: [main, master]
+    tags: ['v1.0.0']
   pull_request:
+    branches: [main, master]
 
 name: R-CMD-check.yaml
 
@@ -45,12 +47,13 @@ jobs:
           install.packages("rcmdcheck")
           install.packages("devtools")
           install.packages(c("httr", "jsonlite", "dplyr", "tidyr", "ggplot2",
-          "igraph", "rvest", "xml2", "stringr", "lubridate", "S4Vectors",
-          "BiocGenerics", "methods"))
+                             "igraph", "rvest", "xml2", "stringr",
+                             "lubridate", "S4Vectors",
+                             "BiocGenerics", "methods"))
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: "rcmdcheck"
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
