@@ -95,6 +95,4 @@ reference:
     - '`ScholarProfile-class`'
     - '`ScholarProfile`'
     - '`calculateMetrics`'
-    - '`plot`
-
-
+    - '`plot`'
