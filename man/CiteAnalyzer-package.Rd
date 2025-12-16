@@ -89,13 +89,6 @@ Useful links:
 \author{
 \strong{Maintainer}: Dany Mukesha \email{danymukesha@gmail.com} (\href{https://orcid.org/0009-0001-9514-751X}{ORCID})
 
-
-\strong{Maintainer}: Dany Mukesha \email{danymukeshea@gmail.com}
-
-\strong{Authors}:
-\describe{
-  \item{Dany Mukesha}{Package creator and maintainer}
-}
 }
 \keyword{analysis}
 \keyword{bibliometrics}

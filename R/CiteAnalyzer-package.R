@@ -53,13 +53,6 @@
 #' includes built-in protections but users should add additional delays between requests when analyzing
 #' multiple scholars.
 #'
-#' @author
-#' \strong{Maintainer}: Dany Mukesha \email{danymukeshea@gmail.com}
-#'
-#' \strong{Authors}:
-#' \describe{
-#'   \item{Dany Mukesha}{Package creator and maintainer}
-#' }
 #'
 #' @references
 #' \itemize{
@@ -69,7 +62,10 @@
 #' }
 #'
 #' @keywords package citation analysis google scholar bibliometrics
+#' @import jsonlite
+#' @import xml2
+#' @importFrom S4Vectors DataFrame
+#' @importFrom lubridate year
 #' @name CiteAnalyzer-package
 #' @aliases CiteAnalyzer
-#' @useDynLib CiteAnalyzer
 NULL
