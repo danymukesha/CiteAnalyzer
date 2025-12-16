@@ -94,5 +94,7 @@ reference:
     - '`ScholarData-class`'
     - '`ScholarProfile-class`'
     - '`ScholarProfile`'
+    - '`calculateMetrics`'
+    - '`plot`
 
 
